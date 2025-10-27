@@ -144,18 +144,24 @@ export const textToSpeech = async (text: string): Promise<string | undefined> =>
 // --- START: CORRECTED FUNCTION ---
 export const generateImage = async (prompt: string, aspectRatio: string): Promise<string | undefined> => {
     const ai = getGenAI();
-    // FIX 1: Use the 'generateImages' method, just like your original code
-    const response = await ai.models.generateImages({
-        // FIX 2: Use the free-tier model name
-        model: 'imagen-2.0-generate-001',
-        prompt,
+    const response = await ai.models.generateContent({
+        // FIX 1: Use a Gemini model that supports image generation
+        model: 'gemini-2.5-flash', 
+        
+        // FIX 2: Pass the text prompt inside the 'contents' array
+        contents: {
+            parts: [{ text: prompt }]
+        },
+        
+        // FIX 3: Configure the output modality to IMAGE
         config: {
-            numberOfImages: 1,
-            outputMimeType: 'image/jpeg',
+            responseMimeType: 'image/jpeg',
+            responseModalities: [Modality.IMAGE],
             aspectRatio,
         },
     });
-    // FIX 3: Use the original response parsing, which is correct for 'generateImages'
-    return response.generatedImages[0].image.imageBytes;
+    
+    // FIX 4: Parse the response like we do for textToSpeech
+    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
 };
 // --- END: CORRECTED FUNCTION ---
