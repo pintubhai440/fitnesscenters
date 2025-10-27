@@ -145,15 +145,13 @@ export const textToSpeech = async (text: string): Promise<string | undefined> =>
 export const generateImage = async (prompt: string, aspectRatio: string): Promise<string | undefined> => {
     const ai = getGenAI();
     const response = await ai.models.generateContent({
-        // FIX 1: Use a Gemini model that supports image generation
-        model: 'gemini-2.5-flash', 
+        // FIX: Using the experimental model name you provided
+        model: 'gemini-2.0-flash-exp-image-generation', 
         
-        // FIX 2: Pass the text prompt inside the 'contents' array
         contents: {
             parts: [{ text: prompt }]
         },
         
-        // FIX 3: Configure the output modality to IMAGE
         config: {
             responseMimeType: 'image/jpeg',
             responseModalities: [Modality.IMAGE],
@@ -161,7 +159,7 @@ export const generateImage = async (prompt: string, aspectRatio: string): Promis
         },
     });
     
-    // FIX 4: Parse the response like we do for textToSpeech
+    // Parse the response
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
 };
 // --- END: CORRECTED FUNCTION ---
