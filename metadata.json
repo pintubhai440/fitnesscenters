@@ -1,0 +1,8 @@
+{
+  "name": "AI Fitness Coach",
+  "description": "An intelligent fitness assessment system that uses AI-powered video analysis to count repetitions, assess form, provide personalized feedback, generate diet plans, and offer real-time coaching.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
