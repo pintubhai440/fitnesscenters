@@ -144,18 +144,18 @@ export const textToSpeech = async (text: string): Promise<string | undefined> =>
 // --- START: CORRECTED FUNCTION ---
 export const generateImage = async (prompt: string, aspectRatio: string): Promise<string | undefined> => {
     const ai = getGenAI();
-    const response = await ai.models.generateContent({
-        // FIX 1: Using a model that is more likely to be on the free tier.
-        model: 'imagen-2.0-generate-001', 
+    // FIX 1: Use the 'generateImages' method, just like your original code
+    const response = await ai.models.generateImages({
+        // FIX 2: Use the free-tier model name
+        model: 'imagen-2.0-generate-001',
         prompt,
         config: {
-            responseMimeType: 'image/jpeg',
-            // FIX 2: Using the correct 'generateContent' config
-            responseModalities: [Modality.IMAGE], 
+            numberOfImages: 1,
+            outputMimeType: 'image/jpeg',
             aspectRatio,
         },
     });
-    // FIX 3: Using the correct 'generateContent' response parsing
-    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    // FIX 3: Use the original response parsing, which is correct for 'generateImages'
+    return response.generatedImages[0].image.imageBytes;
 };
 // --- END: CORRECTED FUNCTION ---
