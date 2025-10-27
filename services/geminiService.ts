@@ -141,16 +141,19 @@ export const textToSpeech = async (text: string): Promise<string | undefined> =>
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
 };
 
+// --- START: CORRECTED FUNCTION ---
 export const generateImage = async (prompt: string, aspectRatio: string): Promise<string | undefined> => {
     const ai = getGenAI();
-    const response = await ai.models.generateImages({
-        model: 'imagen-4.0-generate-001',
+    const response = await ai.models.generateContent({
+        model: 'imagen-3.0-generate-001', // Compatible model for this API structure
         prompt,
         config: {
-            numberOfImages: 1,
-            outputMimeType: 'image/jpeg',
+            responseMimeType: 'image/jpeg',
+            responseModalities: [Modality.IMAGE], // Tell the API we expect an image
             aspectRatio,
         },
     });
-    return response.generatedImages[0].image.imageBytes;
+    // Parse the response just like you do for textToSpeech
+    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
 };
+// --- END: CORRECTED FUNCTION ---
